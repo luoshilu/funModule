@@ -184,7 +184,7 @@
       Object.assign(this, defaultData)
     }
     init () {
-      console.log(this)
+      void 0
 
       this.depsCount = this.deps.length
 
@@ -222,7 +222,7 @@
             // 深度查询依赖，检查是否存在依赖循环
             const checkRes = context.checkCycle(depSrc, this.name)
             if (checkRes) {
-              console.log(`出现了依赖循环...`)
+              void 0
               this.depsCount--
             }
           }
@@ -231,7 +231,7 @@
 
         // 去下载依赖
         context.depMap[depSrc] = [this.name]
-        console.log(depSrc);
+        void 0;
 
         this.fetch(depSrc)
       })
@@ -282,7 +282,7 @@
                 if (dep) return dep.result
               })
               this.result = this.exec(...arg)
-              console.info(`模块${this.name}已加载完成`)
+              void 0
               // 通知依赖此模块的模块，此模块已完成加载
               each(this.beDeps, beDepName => {
                 context.globDeps[beDepName].depsCount--
@@ -313,7 +313,7 @@
       cb = deps
       deps = []
     }
-    console.log(deps);
+    void 0;
     deps = deps.map(dep => getJsFileName(context.config.baseUrl, dep))
 
     context.require({deps, cb})

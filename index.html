@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>funModule</title>
+    <!-- <script src="./src/funM.js"></script> -->
+    <script src="./src/funM.js"></script>
+</head>
+<body>
+    <script>
+        require.config({
+            baseUrl: 'demo/html_require'
+        })
+        // require(['a.js'], function (a) {
+        //     console.log('====index.html====');
+        //     console.log('console a return:' + a);
+        // })
+        // require.config({
+        //     baseUrl: 'demo/module_dep_cycle'
+        // })
+        // require(['a.js','b.js'], function (a, b) {
+        //         console.log(a.hi());
+        //         console.log('b get to a info: ' + b.asay());
+        //         console.log(b.goodbye());
+                
+        //         console.log('over..........');
+                
+        //     });
+        // require(['demo/demo_b.js', 'demo/demo_c.js'], function(demo_b, demo_c){
+            
+        //     console.log('===>im index.html')
+        //     console.log(demo_b);
+        //     console.log(demo_c);
+
+        //     return 'come from _@'
+        // })
+        require(['a.js'], function (a) {
+            console.log(a);
+        })
+    </script>
+</body>
+</html>

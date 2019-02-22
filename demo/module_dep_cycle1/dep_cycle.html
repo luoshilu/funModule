@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>funModule</title>
+    <script src="../../dist/funM.js"></script>
+</head>
+<body>
+    <script>
+        require.config({
+            baseUrl: ''
+        })
+        require(['a.js','b.js'], function (a, b) {
+            console.log(a.hi());
+            console.log('b get to a info: ' + b.asay());
+            console.log(b.goodbye());
+        });
+    </script>
+</body>
+</html>
