@@ -11,7 +11,7 @@
   function scripts () {
     return document.getElementsByTagName('script')
   }
-  // 模块名（绝对路径）
+  // 模块名(路径)
   function getJsFileName (base, src) {
     if (!JsFileName.test(src)) {
       return new Error('模块名不正确，请输入正确的路径')
@@ -47,10 +47,8 @@
   }
   function getScriptData (evt) {
     const node = evt.currentTarget || evt.srcElement
-
     removeListener(node, context.onScriptLoad, 'load', 'onreadystatechange')
     removeListener(node, context.onScriptError, 'error')
-
     return {
       node,
       name: node && node.getAttribute('data-requiremodule'),
@@ -65,10 +63,10 @@
     constructor () {
       this.config = {
         baseUrl: '', // baseUrl
-        deps: '', // 前置模块(require被定义后，这些依赖就已进行加载,而不用手动require.它并不堵塞后续的requrie([]))
+        deps: '', // 前置依赖模块(require被定义后，这些依赖就已进行加载。好处在于不用手动require.并且它不会堵塞后续的requrie([])操作)
       }
       this.name = '_@'
-      this.globDeps = {} // 当前环境下的全局依赖列表 （{name: Module}）
+      this.globDeps = {} // 当前环境下加载的全局依赖列表 （{name: Module}）
       this.depQueue = [] // 模块下载队列
       this.depMap = {}
     }
@@ -83,7 +81,7 @@
       return this.config
     }
     /**
-     * @param {*} data 模块的信息
+     * @param {*} data 模块的数据
      */
     require (data) {
       if (!data) return
@@ -95,14 +93,14 @@
         return new Error(`模块${data}未加载: 使用requrie([])先加载`)
       }
 
-      // 加载文件模块
+      // 文件模块
       if (typeof data.name === 'string' || typeof data.src === 'string') {
         const name = data.name || data.src
         const src = name
         data = {...data, name, src}
       }
 
-      // 本地模块
+      // 匿名模块
       if (typeof data.name === 'undefined') {
         const name = `${context.name}${unfileModule++}`
         data = {...data, name}
@@ -137,7 +135,7 @@
     /**
      * 检查循环依赖
      * 若依赖的模块的依赖关系中有自身模块，则先执行自身模块
-     * @param {checked：深度检查的模块，glob: 当前模块}
+     * @param {child：子模块，parent: 当前模块}
      */
     checkCycle (child, parent) {
       const deps = context.globDeps[child].deps
@@ -146,7 +144,7 @@
           return true
         }
 
-        // 若child的依赖以及加载但状态为1，则需要检查该依赖模块的依赖是否有parent
+        // 若child的依赖已经加载但状态为1，则需要检查该依赖模块的依赖是否等于parent
         if (context.globDeps[dep] && context.globDeps[dep].status === 1) {
           return this.checkCycle(deps, parent)
         }
@@ -217,7 +215,7 @@
             moduleExist.beDeps.push(this.name)
             this.depsCount--
           } else if (moduleExist.status === 1) {
-            // require模块(系统命名)应优先于define模块(自命名)
+            // require模块(匿名模块)应优先于define模块(文件命名模块)
             (new RegExp(context.name)).test(this.name) ? moduleExist.beDeps.unshift(this.name) : moduleExist.beDeps.push(this.name)
             // 深度查询依赖，检查是否存在依赖循环
             const checkRes = context.checkCycle(depSrc, this.name)
@@ -355,9 +353,7 @@
       deps = []
     }
     deps = deps.map(dep => getJsFileName(context.config.baseUrl, dep))
-    // 检查是否已加载
     context.depQueue.push({name, deps, cb})
-    // }
   }
   global.define = define
 
